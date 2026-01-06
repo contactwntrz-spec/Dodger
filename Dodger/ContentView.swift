@@ -222,7 +222,7 @@ struct ContentView: View {
         title: String,
         options: [Option],
         selected: Option,
-        colorProvider: (Option) -> Color,
+        colorProvider: @escaping (Option) -> Color,
         action: @escaping (Option) -> Void
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
