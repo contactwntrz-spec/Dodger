@@ -59,6 +59,12 @@ struct ContentView: View {
             .onChange(of: gameState.isGameOver) { _, isGameOver in
                 syncPauseState()
             }
+            .onChange(of: gameState.playerColorOption) { _, _ in
+                scene?.applyTheme()
+            }
+            .onChange(of: gameState.backgroundOption) { _, _ in
+                scene?.applyTheme()
+            }
         }
     }
 
@@ -138,6 +144,11 @@ struct ContentView: View {
                     .font(.title3)
                     .foregroundStyle(.white.opacity(0.9))
 
+                HStack(spacing: 12) {
+                    menuCard(title: "Highscore", value: "\(gameState.bestScore)")
+                    menuCard(title: "Modus", value: "Endlos")
+                }
+
                 Button("Start") {
                     startGame(with: size)
                 }
@@ -147,6 +158,8 @@ struct ContentView: View {
                 .background(Color.white)
                 .foregroundStyle(.black)
                 .clipShape(Capsule())
+
+                settingsPanel(title: "Einstellungen")
             }
             .padding(.horizontal, 24)
         }
@@ -172,8 +185,83 @@ struct ContentView: View {
                 .background(Color.white)
                 .foregroundStyle(.black)
                 .clipShape(Capsule())
+
+                settingsPanel(title: "Pause-Einstellungen")
             }
         }
+    }
+
+    private func settingsPanel(title: String) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(title)
+                .font(.headline)
+                .foregroundStyle(.white)
+
+            selectionRow(
+                title: "Spielerfarbe",
+                options: GameState.PlayerColorOption.allCases,
+                selected: gameState.playerColorOption,
+                colorProvider: { $0.color },
+                action: { gameState.setPlayerColor($0) }
+            )
+
+            selectionRow(
+                title: "Hintergrund",
+                options: GameState.BackgroundOption.allCases,
+                selected: gameState.backgroundOption,
+                colorProvider: { $0.color },
+                action: { gameState.setBackground($0) }
+            )
+        }
+        .padding(16)
+        .background(Color.white.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    private func selectionRow<Option: Identifiable & Hashable>(
+        title: String,
+        options: [Option],
+        selected: Option,
+        colorProvider: (Option) -> Color,
+        action: @escaping (Option) -> Void
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.85))
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 48), spacing: 12)], spacing: 12) {
+                ForEach(options, id: \.id) { option in
+                    Button {
+                        action(option)
+                    } label: {
+                        Circle()
+                            .fill(colorProvider(option))
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white, lineWidth: option.id == selected.id ? 3 : 1)
+                            )
+                            .frame(width: 44, height: 44)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    private func menuCard(title: String, value: String) -> some View {
+        VStack(spacing: 6) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.7))
+            Text(value)
+                .font(.headline)
+                .foregroundStyle(.white)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .background(Color.white.opacity(0.12))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
     private func startGame(with size: CGSize) {

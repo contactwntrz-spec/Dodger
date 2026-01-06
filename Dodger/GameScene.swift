@@ -25,8 +25,6 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         static let minimumFallDuration: TimeInterval = 1.0
         static let fallDurationDecay: TimeInterval = 0.05
         static let scoreTick: TimeInterval = 0.2
-        static let backgroundColor = SKColor(red: 0.06, green: 0.07, blue: 0.1, alpha: 1.0)
-        static let playerColor = SKColor.systemMint
         static let obstacleColor = SKColor.systemPink
     }
 
@@ -51,7 +49,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 
     private func configureScene() {
         scaleMode = .resizeFill
-        backgroundColor = Constants.backgroundColor
+        applyTheme()
     }
 
     override func didMove(to view: SKView) {
@@ -76,7 +74,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 
     private func createPlayer() {
         let player = SKShapeNode(rectOf: Constants.playerSize, cornerRadius: 8)
-        player.fillColor = Constants.playerColor
+        player.fillColor = gameState?.playerColorOption.skColor ?? SKColor.systemMint
         player.strokeColor = .clear
         player.name = "player"
 
@@ -91,6 +89,11 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(player)
         playerNode = player
         updatePlayerPosition(x: size.width / 2)
+    }
+
+    func applyTheme() {
+        backgroundColor = gameState?.backgroundOption.skColor ?? SKColor.black
+        playerNode?.fillColor = gameState?.playerColorOption.skColor ?? SKColor.systemMint
     }
 
     private func updatePlayerPosition(x: CGFloat?) {
