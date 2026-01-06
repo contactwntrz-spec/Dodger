@@ -93,6 +93,7 @@ struct ContentView: View {
     }
 
     private func restartGame(with size: CGSize) {
+        gameState.reset()
         scene = GameScene(size: size, gameState: gameState)
     }
 }
