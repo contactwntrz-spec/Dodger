@@ -29,24 +29,49 @@ struct ContentView: View {
                         .ignoresSafeArea()
                 }
 
-                VStack {
-                    HStack {
-                        Text("Score: \(gameState.score)")
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                        Spacer()
-                        Text("Best: \(gameState.bestScore)")
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
+                if gameState.hasStarted {
+                    VStack {
+                        HStack {
+                            Text("Score: \(gameState.score)")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                            Spacer()
+                            Text("Best: \(gameState.bestScore)")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
 
-                    Spacer()
+                        Spacer()
+                    }
+
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button(gameState.isPaused ? "Resume" : "Pause") {
+                                togglePause()
+                            }
+                            .font(.headline)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(Color.white.opacity(0.9))
+                            .foregroundStyle(.black)
+                            .clipShape(Capsule())
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 60)
+
+                        Spacer()
+                    }
                 }
 
-                if gameState.isGameOver {
+                if !gameState.hasStarted {
+                    startOverlay(in: geometry.size)
+                } else if gameState.isGameOver {
                     gameOverOverlay(in: geometry.size)
+                } else if gameState.isPaused {
+                    pauseOverlay(in: geometry.size)
                 }
             }
             .onAppear {
@@ -92,9 +117,71 @@ struct ContentView: View {
         }
     }
 
+    @ViewBuilder
+    private func startOverlay(in size: CGSize) -> some View {
+        ZStack {
+            Color.black.opacity(0.75)
+                .ignoresSafeArea()
+
+            VStack(spacing: 16) {
+                Text("Dodger")
+                    .font(.largeTitle.bold())
+                    .foregroundStyle(.white)
+
+                Text("Weiche den Hindernissen aus")
+                    .font(.title3)
+                    .foregroundStyle(.white.opacity(0.9))
+
+                Button("Start") {
+                    startGame(with: size)
+                }
+                .font(.headline)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(Color.white)
+                .foregroundStyle(.black)
+                .clipShape(Capsule())
+            }
+            .padding(.horizontal, 24)
+        }
+    }
+
+    @ViewBuilder
+    private func pauseOverlay(in size: CGSize) -> some View {
+        ZStack {
+            Color.black.opacity(0.45)
+                .ignoresSafeArea()
+
+            VStack(spacing: 16) {
+                Text("Pause")
+                    .font(.largeTitle.bold())
+                    .foregroundStyle(.white)
+
+                Button("Weiter") {
+                    togglePause()
+                }
+                .font(.headline)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(Color.white)
+                .foregroundStyle(.black)
+                .clipShape(Capsule())
+            }
+        }
+    }
+
+    private func startGame(with size: CGSize) {
+        gameState.startGame()
+        scene = GameScene(size: size, gameState: gameState)
+    }
+
     private func restartGame(with size: CGSize) {
         gameState.reset()
         scene = GameScene(size: size, gameState: gameState)
+    }
+
+    private func togglePause() {
+        gameState.setPaused(!gameState.isPaused)
     }
 }
 

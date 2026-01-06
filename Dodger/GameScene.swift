@@ -106,7 +106,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func update(_ currentTime: TimeInterval) {
-        guard let gameState, !gameState.isGameOver else { return }
+        guard let gameState, !gameState.isGameOver, !gameState.isPaused else { return }
 
         if lastUpdateTime == 0 {
             lastUpdateTime = currentTime
@@ -179,7 +179,6 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         let categories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if categories == PhysicsCategory.player | PhysicsCategory.obstacle {
             gameState.triggerGameOver()
-            isPaused = true
         }
     }
 }
