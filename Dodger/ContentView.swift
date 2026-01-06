@@ -310,7 +310,7 @@ struct ContentView: View {
     }
 
     private func applyPauseState(_ shouldPause: Bool) {
-        scene?.isPaused = shouldPause
+        scene?.isPaused = false
         scene?.speed = shouldPause ? 0 : 1
         scene?.physicsWorld.speed = shouldPause ? 0 : 1
     }

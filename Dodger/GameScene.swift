@@ -28,7 +28,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         static let obstacleColor = SKColor.systemPink
     }
 
-    private weak var gameState: GameState?
+    private let gameState: GameState
 
     private var playerNode: SKShapeNode?
     private var lastUpdateTime: TimeInterval = 0
@@ -43,8 +43,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configureScene()
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func configureScene() {
@@ -69,15 +68,16 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func movePlayer(toX xPosition: CGFloat) {
-        guard let gameState, gameState.hasStarted, !gameState.isGameOver else { return }
+        guard gameState.hasStarted, !gameState.isGameOver else { return }
         updatePlayerPosition(x: xPosition)
     }
 
     private func createPlayer() {
         let player = SKShapeNode(rectOf: Constants.playerSize, cornerRadius: 8)
-        player.fillColor = gameState?.playerColorOption.skColor ?? SKColor.systemMint
+        player.fillColor = gameState.playerColorOption.skColor
         player.strokeColor = .clear
         player.name = "player"
+        player.zPosition = 3
 
         let body = SKPhysicsBody(rectangleOf: Constants.playerSize)
         body.isDynamic = false
@@ -93,8 +93,8 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func applyTheme() {
-        backgroundColor = gameState?.backgroundOption.skColor ?? SKColor.black
-        playerNode?.fillColor = gameState?.playerColorOption.skColor ?? SKColor.systemMint
+        backgroundColor = gameState.backgroundOption.skColor
+        playerNode?.fillColor = gameState.playerColorOption.skColor
     }
 
     private func updatePlayerPosition(x: CGFloat?) {
@@ -108,8 +108,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func update(_ currentTime: TimeInterval) {
-        guard let gameState,
-              gameState.hasStarted,
+        guard gameState.hasStarted,
               !gameState.isGameOver,
               !gameState.isPaused else { return }
 
@@ -139,7 +138,6 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func updateScoreIfNeeded() {
-        guard let gameState else { return }
         while scoreAccumulator >= Constants.scoreTick {
             scoreAccumulator -= Constants.scoreTick
             gameState.updateScore(gameState.score + 1)
@@ -162,7 +160,8 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         let obstacleSize = CGSize(width: sizeValue, height: sizeValue)
         let obstacle = SKSpriteNode(color: Constants.obstacleColor, size: obstacleSize)
         obstacle.name = "obstacle"
-        obstacle.zPosition = 1
+        obstacle.zPosition = 2
+        obstacle.colorBlendFactor = 1.0
 
         let body = SKPhysicsBody(rectangleOf: obstacleSize)
         body.isDynamic = true
@@ -188,7 +187,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func didBegin(_ contact: SKPhysicsContact) {
-        guard let gameState, !gameState.isGameOver else { return }
+        guard !gameState.isGameOver else { return }
 
         let categories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if categories == PhysicsCategory.player | PhysicsCategory.obstacle {
