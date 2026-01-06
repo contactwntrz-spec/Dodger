@@ -18,13 +18,6 @@ struct ContentView: View {
                 if let scene {
                     SpriteView(scene: scene)
                         .ignoresSafeArea()
-                        .contentShape(Rectangle())
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    scene.movePlayer(toX: value.location.x)
-                                }
-                        )
                 } else {
                     Color.black
                         .ignoresSafeArea()
@@ -43,6 +36,13 @@ struct ContentView: View {
                     pauseOverlay(in: geometry.size)
                 }
             }
+            .contentShape(Rectangle())
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        scene?.movePlayer(toX: value.location.x)
+                    }
+            )
             .onAppear {
                 if scene == nil {
                     scene = GameScene(size: geometry.size, gameState: gameState)
@@ -186,15 +186,19 @@ struct ContentView: View {
     private func startGame(with size: CGSize) {
         gameState.startGame()
         scene = GameScene(size: size, gameState: gameState)
+        scene?.isPaused = false
     }
 
     private func restartGame(with size: CGSize) {
         gameState.reset()
         scene = GameScene(size: size, gameState: gameState)
+        scene?.isPaused = false
     }
 
     private func togglePause() {
-        gameState.setPaused(!gameState.isPaused)
+        let newValue = !gameState.isPaused
+        gameState.setPaused(newValue)
+        scene?.isPaused = newValue
     }
 }
 
