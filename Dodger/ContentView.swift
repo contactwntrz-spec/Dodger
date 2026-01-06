@@ -18,6 +18,7 @@ struct ContentView: View {
                 if let scene {
                     SpriteView(scene: scene)
                         .ignoresSafeArea()
+                        .contentShape(Rectangle())
                         .gesture(
                             DragGesture(minimumDistance: 0)
                                 .onChanged { value in
@@ -50,38 +51,51 @@ struct ContentView: View {
             .onChange(of: geometry.size) { _, newSize in
                 scene?.size = newSize
             }
+            .onChange(of: gameState.isPaused) { _, paused in
+                scene?.isPaused = paused
+            }
+            .onChange(of: gameState.isGameOver) { _, isGameOver in
+                if isGameOver {
+                    scene?.isPaused = true
+                }
+            }
         }
     }
 
     private var scoreOverlay: some View {
-        HStack {
-            Text("Score: \(gameState.score)")
-                .font(.headline)
-                .foregroundStyle(.white)
+        VStack {
+            HStack {
+                Text("Score: \(gameState.score)")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                Spacer()
+                Text("Best: \(gameState.bestScore)")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
             Spacer()
-            Text("Best: \(gameState.bestScore)")
-                .font(.headline)
-                .foregroundStyle(.white)
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .frame(maxWidth: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .allowsHitTesting(false)
     }
 
     private var pauseButtonOverlay: some View {
-        Button(gameState.isPaused ? "Resume" : "Pause") {
-            togglePause()
+        ZStack(alignment: .topTrailing) {
+            Button(gameState.isPaused ? "Resume" : "Pause") {
+                togglePause()
+            }
+            .font(.headline)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(Color.white.opacity(0.9))
+            .foregroundStyle(.black)
+            .clipShape(Capsule())
+            .padding(.horizontal, 20)
+            .padding(.top, 60)
         }
-        .font(.headline)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(Color.white.opacity(0.9))
-        .foregroundStyle(.black)
-        .clipShape(Capsule())
-        .padding(.horizontal, 20)
-        .padding(.top, 60)
-        .frame(maxWidth: .infinity, alignment: .topTrailing)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
     }
 
     @ViewBuilder
