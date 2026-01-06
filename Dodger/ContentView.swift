@@ -45,21 +45,19 @@ struct ContentView: View {
                 if scene == nil {
                     scene = GameScene(size: geometry.size, gameState: gameState)
                 }
-                scene?.isPaused = !gameState.hasStarted
+                syncPauseState()
             }
             .onChange(of: geometry.size) { _, newSize in
                 scene?.size = newSize
             }
             .onChange(of: gameState.hasStarted) { _, hasStarted in
-                scene?.isPaused = !hasStarted
+                syncPauseState()
             }
             .onChange(of: gameState.isPaused) { _, paused in
-                scene?.isPaused = paused
+                syncPauseState()
             }
             .onChange(of: gameState.isGameOver) { _, isGameOver in
-                if isGameOver {
-                    scene?.isPaused = true
-                }
+                syncPauseState()
             }
         }
     }
@@ -181,19 +179,25 @@ struct ContentView: View {
     private func startGame(with size: CGSize) {
         gameState.startGame()
         scene = GameScene(size: size, gameState: gameState)
-        scene?.isPaused = false
+        syncPauseState()
     }
 
     private func restartGame(with size: CGSize) {
         gameState.reset()
         scene = GameScene(size: size, gameState: gameState)
-        scene?.isPaused = false
+        syncPauseState()
     }
 
     private func togglePause() {
         let newValue = !gameState.isPaused
         gameState.setPaused(newValue)
-        scene?.isPaused = newValue
+        syncPauseState()
+    }
+
+    private func syncPauseState() {
+        let shouldPause = !gameState.hasStarted || gameState.isPaused || gameState.isGameOver
+        scene?.isPaused = shouldPause
+        scene?.view?.isPaused = shouldPause
     }
 }
 
