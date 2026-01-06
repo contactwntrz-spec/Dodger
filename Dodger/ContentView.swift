@@ -54,7 +54,7 @@ struct ContentView: View {
                     scene = GameScene(size: geometry.size, gameState: gameState)
                 }
             }
-            .onChange(of: geometry.size, initial: false) { _, newSize in
+            .onChange(of: geometry.size) { newSize in
                 scene?.size = newSize
             }
         }
@@ -98,6 +98,8 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
