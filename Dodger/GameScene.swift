@@ -58,12 +58,10 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = .zero
         createPlayer()
-        gameState?.reset()
         lastUpdateTime = 0
         spawnTimer = 0
         elapsedTime = 0
         scoreAccumulator = 0
-        isPaused = false
     }
 
     override func didChangeSize(_ oldSize: CGSize) {
