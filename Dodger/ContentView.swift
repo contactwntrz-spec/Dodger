@@ -199,7 +199,6 @@ struct ContentView: View {
         scene?.isPaused = shouldPause
         scene?.speed = shouldPause ? 0 : 1
         scene?.physicsWorld.speed = shouldPause ? 0 : 1
-        scene?.view?.isPaused = shouldPause
     }
 }
 
