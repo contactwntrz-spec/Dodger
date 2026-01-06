@@ -197,6 +197,8 @@ struct ContentView: View {
     private func syncPauseState() {
         let shouldPause = !gameState.hasStarted || gameState.isPaused || gameState.isGameOver
         scene?.isPaused = shouldPause
+        scene?.speed = shouldPause ? 0 : 1
+        scene?.physicsWorld.speed = shouldPause ? 0 : 1
         scene?.view?.isPaused = shouldPause
     }
 }
