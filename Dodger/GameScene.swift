@@ -160,10 +160,9 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     private func spawnObstacle() {
         let sizeValue = CGFloat.random(in: Constants.obstacleMinSize...Constants.obstacleMaxSize)
         let obstacleSize = CGSize(width: sizeValue, height: sizeValue)
-        let obstacle = SKShapeNode(rectOf: obstacleSize, cornerRadius: 6)
-        obstacle.fillColor = Constants.obstacleColor
-        obstacle.strokeColor = .clear
+        let obstacle = SKSpriteNode(color: Constants.obstacleColor, size: obstacleSize)
         obstacle.name = "obstacle"
+        obstacle.zPosition = 1
 
         let body = SKPhysicsBody(rectangleOf: obstacleSize)
         body.isDynamic = true
