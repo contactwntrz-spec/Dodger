@@ -30,40 +30,8 @@ struct ContentView: View {
                 }
 
                 if gameState.hasStarted {
-                    VStack {
-                        HStack {
-                            Text("Score: \(gameState.score)")
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                            Spacer()
-                            Text("Best: \(gameState.bestScore)")
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.top, 20)
-
-                        Spacer()
-                    }
-
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Button(gameState.isPaused ? "Resume" : "Pause") {
-                                togglePause()
-                            }
-                            .font(.headline)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(Color.white.opacity(0.9))
-                            .foregroundStyle(.black)
-                            .clipShape(Capsule())
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.top, 60)
-
-                        Spacer()
-                    }
+                    scoreOverlay
+                    pauseButtonOverlay
                 }
 
                 if !gameState.hasStarted {
@@ -79,10 +47,41 @@ struct ContentView: View {
                     scene = GameScene(size: geometry.size, gameState: gameState)
                 }
             }
-            .onChange(of: geometry.size) { newSize in
+            .onChange(of: geometry.size) { _, newSize in
                 scene?.size = newSize
             }
         }
+    }
+
+    private var scoreOverlay: some View {
+        HStack {
+            Text("Score: \(gameState.score)")
+                .font(.headline)
+                .foregroundStyle(.white)
+            Spacer()
+            Text("Best: \(gameState.bestScore)")
+                .font(.headline)
+                .foregroundStyle(.white)
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
+        .allowsHitTesting(false)
+    }
+
+    private var pauseButtonOverlay: some View {
+        Button(gameState.isPaused ? "Resume" : "Pause") {
+            togglePause()
+        }
+        .font(.headline)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color.white.opacity(0.9))
+        .foregroundStyle(.black)
+        .clipShape(Capsule())
+        .padding(.horizontal, 20)
+        .padding(.top, 60)
+        .frame(maxWidth: .infinity, alignment: .topTrailing)
     }
 
     @ViewBuilder
