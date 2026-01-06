@@ -47,9 +47,13 @@ struct ContentView: View {
                 if scene == nil {
                     scene = GameScene(size: geometry.size, gameState: gameState)
                 }
+                scene?.isPaused = !gameState.hasStarted
             }
             .onChange(of: geometry.size) { _, newSize in
                 scene?.size = newSize
+            }
+            .onChange(of: gameState.hasStarted) { _, hasStarted in
+                scene?.isPaused = !hasStarted
             }
             .onChange(of: gameState.isPaused) { _, paused in
                 scene?.isPaused = paused

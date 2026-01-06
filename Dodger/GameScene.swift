@@ -70,7 +70,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func movePlayer(toX xPosition: CGFloat) {
-        guard gameState?.isGameOver == false else { return }
+        guard let gameState, gameState.hasStarted, !gameState.isGameOver else { return }
         updatePlayerPosition(x: xPosition)
     }
 
@@ -104,7 +104,10 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func update(_ currentTime: TimeInterval) {
-        guard let gameState, !gameState.isGameOver, !gameState.isPaused else { return }
+        guard let gameState,
+              gameState.hasStarted,
+              !gameState.isGameOver,
+              !gameState.isPaused else { return }
 
         if lastUpdateTime == 0 {
             lastUpdateTime = currentTime
