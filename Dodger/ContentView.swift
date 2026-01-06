@@ -54,7 +54,7 @@ struct ContentView: View {
                     scene = GameScene(size: geometry.size, gameState: gameState)
                 }
             }
-            .onChange(of: geometry.size) { newSize in
+            .onChange(of: geometry.size, initial: false) { _, newSize in
                 scene?.size = newSize
             }
         }

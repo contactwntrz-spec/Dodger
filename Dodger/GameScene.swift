@@ -41,22 +41,17 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     init(size: CGSize, gameState: GameState) {
         self.gameState = gameState
         super.init(size: size)
-        scaleMode = .resizeFill
-        backgroundColor = Constants.backgroundColor
-    }
-
-    override init(size: CGSize) {
-        super.init(size: size)
-        scaleMode = .resizeFill
-        backgroundColor = Constants.backgroundColor
+        configureScene()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        configureScene()
     }
 
-    func configure(with gameState: GameState) {
-        self.gameState = gameState
+    private func configureScene() {
+        scaleMode = .resizeFill
+        backgroundColor = Constants.backgroundColor
     }
 
     override func didMove(to view: SKView) {
@@ -77,12 +72,12 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     func movePlayer(toX xPosition: CGFloat) {
+        guard gameState?.isGameOver == false else { return }
         updatePlayerPosition(x: xPosition)
     }
 
     private func createPlayer() {
-        let rect = CGRect(origin: .zero, size: Constants.playerSize)
-        let player = SKShapeNode(rect: rect, cornerRadius: 8)
+        let player = SKShapeNode(rectOf: Constants.playerSize, cornerRadius: 8)
         player.fillColor = Constants.playerColor
         player.strokeColor = .clear
         player.name = "player"
@@ -104,8 +99,9 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let playerNode else { return }
         let desiredX = x ?? size.width / 2
         let halfWidth = Constants.playerSize.width / 2
+        let halfHeight = Constants.playerSize.height / 2
         let clampedX = max(halfWidth, min(size.width - halfWidth, desiredX))
-        let yPosition = size.height * Constants.playerBottomInsetRatio
+        let yPosition = max(halfHeight, size.height * Constants.playerBottomInsetRatio)
         playerNode.position = CGPoint(x: clampedX, y: yPosition)
     }
 
