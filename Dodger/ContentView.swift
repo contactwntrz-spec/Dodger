@@ -116,15 +116,27 @@ struct ContentView: View {
                     .font(.title3)
                     .foregroundStyle(.white)
 
-                Button("Restart") {
-                    restartGame(with: size)
+                HStack(spacing: 12) {
+                    Button("Main Menu") {
+                        returnToMenu()
+                    }
+                    .font(.headline)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.white)
+                    .foregroundStyle(.black)
+                    .clipShape(Capsule())
+
+                    Button("Restart") {
+                        restartGame(with: size)
+                    }
+                    .font(.headline)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color.white.opacity(0.85))
+                    .foregroundStyle(.black)
+                    .clipShape(Capsule())
                 }
-                .font(.headline)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 12)
-                .background(Color.white)
-                .foregroundStyle(.black)
-                .clipShape(Capsule())
             }
         }
     }
@@ -267,26 +279,41 @@ struct ContentView: View {
     private func startGame(with size: CGSize) {
         gameState.startGame()
         scene = GameScene(size: size, gameState: gameState)
+        scene?.applyTheme()
         syncPauseState()
     }
 
     private func restartGame(with size: CGSize) {
         gameState.reset()
         scene = GameScene(size: size, gameState: gameState)
+        scene?.applyTheme()
+        syncPauseState()
+    }
+
+    private func returnToMenu() {
+        gameState.hasStarted = false
+        gameState.isGameOver = false
+        gameState.isPaused = false
+        gameState.score = 0
         syncPauseState()
     }
 
     private func togglePause() {
         let newValue = !gameState.isPaused
         gameState.setPaused(newValue)
-        scene?.isPaused = newValue
-        scene?.view?.isPaused = newValue
+        applyPauseState(newValue)
     }
 
     private func syncPauseState() {
         let shouldPause = !gameState.hasStarted || gameState.isPaused || gameState.isGameOver
+        applyPauseState(shouldPause)
+    }
+
+    private func applyPauseState(_ shouldPause: Bool) {
         scene?.isPaused = shouldPause
         scene?.view?.isPaused = shouldPause
+        scene?.speed = shouldPause ? 0 : 1
+        scene?.physicsWorld.speed = shouldPause ? 0 : 1
     }
 }
 

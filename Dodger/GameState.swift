@@ -30,18 +30,18 @@ final class GameState: ObservableObject {
             }
         }
 
-        var color: Color {
+        var skColor: SKColor {
             switch self {
-            case .mint: return .mint
-            case .blue: return .cyan
-            case .purple: return .purple
-            case .orange: return .orange
-            case .white: return .white
+            case .mint: return SKColor.systemMint
+            case .blue: return SKColor.systemCyan
+            case .purple: return SKColor.systemPurple
+            case .orange: return SKColor.systemOrange
+            case .white: return SKColor.white
             }
         }
 
-        var skColor: SKColor {
-            SKColor(color)
+        var color: Color {
+            Color(skColor)
         }
     }
 
@@ -64,18 +64,18 @@ final class GameState: ObservableObject {
             }
         }
 
-        var color: Color {
+        var skColor: SKColor {
             switch self {
-            case .midnight: return Color(red: 0.06, green: 0.07, blue: 0.1)
-            case .nebula: return Color(red: 0.06, green: 0.1, blue: 0.2)
-            case .charcoal: return Color(red: 0.12, green: 0.12, blue: 0.14)
-            case .aurora: return Color(red: 0.05, green: 0.16, blue: 0.16)
-            case .graphite: return Color(red: 0.08, green: 0.08, blue: 0.12)
+            case .midnight: return SKColor(red: 0.06, green: 0.07, blue: 0.1, alpha: 1.0)
+            case .nebula: return SKColor(red: 0.06, green: 0.1, blue: 0.2, alpha: 1.0)
+            case .charcoal: return SKColor(red: 0.12, green: 0.12, blue: 0.14, alpha: 1.0)
+            case .aurora: return SKColor(red: 0.05, green: 0.16, blue: 0.16, alpha: 1.0)
+            case .graphite: return SKColor(red: 0.08, green: 0.08, blue: 0.12, alpha: 1.0)
             }
         }
 
-        var skColor: SKColor {
-            SKColor(color)
+        var color: Color {
+            Color(skColor)
         }
     }
 

@@ -56,6 +56,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = .zero
         createPlayer()
+        applyTheme()
         lastUpdateTime = 0
         spawnTimer = 0
         elapsedTime = 0
