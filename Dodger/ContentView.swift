@@ -191,7 +191,8 @@ struct ContentView: View {
     private func togglePause() {
         let newValue = !gameState.isPaused
         gameState.setPaused(newValue)
-        syncPauseState()
+        scene?.isPaused = newValue
+        scene?.view?.isPaused = newValue
     }
 
     private func syncPauseState() {
