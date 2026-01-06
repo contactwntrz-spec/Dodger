@@ -18,14 +18,26 @@ struct ContentView: View {
                 if let scene {
                     SpriteView(scene: scene)
                         .ignoresSafeArea()
+                        .contentShape(Rectangle())
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { value in
+                                    scene.movePlayer(toX: value.location.x)
+                                }
+                        )
+                        .overlay(alignment: .top) {
+                            if gameState.hasStarted {
+                                scoreOverlay
+                            }
+                        }
+                        .overlay(alignment: .topTrailing) {
+                            if gameState.hasStarted {
+                                pauseButton
+                            }
+                        }
                 } else {
                     Color.black
                         .ignoresSafeArea()
-                }
-
-                if gameState.hasStarted {
-                    scoreOverlay
-                    pauseButtonOverlay
                 }
 
                 if !gameState.hasStarted {
@@ -36,13 +48,6 @@ struct ContentView: View {
                     pauseOverlay(in: geometry.size)
                 }
             }
-            .contentShape(Rectangle())
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { value in
-                        scene?.movePlayer(toX: value.location.x)
-                    }
-            )
             .onAppear {
                 if scene == nil {
                     scene = GameScene(size: geometry.size, gameState: gameState)
@@ -67,39 +72,32 @@ struct ContentView: View {
     }
 
     private var scoreOverlay: some View {
-        VStack {
-            HStack {
-                Text("Score: \(gameState.score)")
-                    .font(.headline)
-                    .foregroundStyle(.white)
-                Spacer()
-                Text("Best: \(gameState.bestScore)")
-                    .font(.headline)
-                    .foregroundStyle(.white)
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
+        HStack {
+            Text("Score: \(gameState.score)")
+                .font(.headline)
+                .foregroundStyle(.white)
             Spacer()
+            Text("Best: \(gameState.bestScore)")
+                .font(.headline)
+                .foregroundStyle(.white)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
         .allowsHitTesting(false)
     }
 
-    private var pauseButtonOverlay: some View {
-        ZStack(alignment: .topTrailing) {
-            Button(gameState.isPaused ? "Resume" : "Pause") {
-                togglePause()
-            }
-            .font(.headline)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(Color.white.opacity(0.9))
-            .foregroundStyle(.black)
-            .clipShape(Capsule())
-            .padding(.horizontal, 20)
-            .padding(.top, 60)
+    private var pauseButton: some View {
+        Button(gameState.isPaused ? "Resume" : "Pause") {
+            togglePause()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+        .font(.headline)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color.white.opacity(0.9))
+        .foregroundStyle(.black)
+        .clipShape(Capsule())
+        .padding(.horizontal, 20)
+        .padding(.top, 60)
     }
 
     @ViewBuilder
