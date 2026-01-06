@@ -124,6 +124,16 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         spawnObstacleIfNeeded()
     }
 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        movePlayer(toX: touch.location(in: self).x)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        movePlayer(toX: touch.location(in: self).x)
+    }
+
     private func updateScoreIfNeeded() {
         guard let gameState else { return }
         while scoreAccumulator >= Constants.scoreTick {

@@ -18,13 +18,6 @@ struct ContentView: View {
                 if let scene {
                     SpriteView(scene: scene)
                         .ignoresSafeArea()
-                        .contentShape(Rectangle())
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    scene.movePlayer(toX: value.location.x)
-                                }
-                        )
                         .overlay(alignment: .top) {
                             if gameState.hasStarted {
                                 scoreOverlay
