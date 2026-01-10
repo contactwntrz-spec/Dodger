@@ -6,8 +6,21 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		42CECB932F0D24C100CE83B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CECB982F0D24C100CE83B5 /* ContentView.swift */; };
+		42CECB942F0D24C100CE83B5 /* DodgerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CECB992F0D24C100CE83B5 /* DodgerApp.swift */; };
+		42CECB952F0D24C100CE83B5 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CECB9A2F0D24C100CE83B5 /* GameScene.swift */; };
+		42CECB962F0D24C100CE83B5 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CECB9B2F0D24C100CE83B5 /* GameState.swift */; };
+		42CECB972F0D24C100CE83B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CECB9C2F0D24C100CE83B5 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		42CECB872F0D24C000CE83B5 /* Dodger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dodger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42CECB982F0D24C100CE83B5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		42CECB992F0D24C100CE83B5 /* DodgerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DodgerApp.swift; sourceTree = "<group>"; };
+		42CECB9A2F0D24C100CE83B5 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		42CECB9B2F0D24C100CE83B5 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
+		42CECB9C2F0D24C100CE83B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +45,7 @@
 		42CECB7E2F0D24C000CE83B5 = {
 			isa = PBXGroup;
 			children = (
+				42CECB9D2F0D24C100CE83B5 /* Sources */,
 				42CECB892F0D24C000CE83B5 /* Dodger */,
 				42CECB882F0D24C000CE83B5 /* Products */,
 			);
@@ -43,6 +57,18 @@
 				42CECB872F0D24C000CE83B5 /* Dodger.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		42CECB9D2F0D24C100CE83B5 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				42CECB9C2F0D24C100CE83B5 /* Assets.xcassets */,
+				42CECB982F0D24C100CE83B5 /* ContentView.swift */,
+				42CECB992F0D24C100CE83B5 /* DodgerApp.swift */,
+				42CECB9A2F0D24C100CE83B5 /* GameScene.swift */,
+				42CECB9B2F0D24C100CE83B5 /* GameState.swift */,
+			);
+			path = Dodger;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -109,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42CECB972F0D24C100CE83B5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +146,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42CECB932F0D24C100CE83B5 /* ContentView.swift in Sources */,
+				42CECB942F0D24C100CE83B5 /* DodgerApp.swift in Sources */,
+				42CECB952F0D24C100CE83B5 /* GameScene.swift in Sources */,
+				42CECB962F0D24C100CE83B5 /* GameState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
